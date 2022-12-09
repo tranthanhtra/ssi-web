@@ -1,7 +1,7 @@
 <template>
   <div class="home-container">
     <div class="left-bar-container">
-      <LeftBar />
+      <LeftBar/>
     </div>
 
     <div class="main-content-container">
@@ -16,7 +16,7 @@
 
         <div class="content">
           <div class="logo">
-            <img src="../../assets/favicon.png" alt="" />
+            <img src="../../assets/favicon.png" alt=""/>
           </div>
         </div>
       </div>
@@ -38,14 +38,14 @@
             <div class="input-group">
               <div class="input username">
                 <label for="username">User name</label>
-                <input type="text" id="username" v-model="formUser.username" />
+                <input type="text" id="username" v-model="formUser.username"/>
               </div>
               <div class="input fullname">
                 <label for="wallet-address">Wallet address</label>
                 <input
-                  type="text"
-                  id="wallet-address"
-                  v-model="formUser.walletAddress"
+                    type="text"
+                    id="wallet-address"
+                    v-model="formUser.walletAddress"
                 />
               </div>
             </div>
@@ -53,14 +53,14 @@
             <div class="input-group">
               <div class="input user-id">
                 <label for="user-id">Identity number</label>
-                <input type="text" id="user-id" v-model="formUser.userId" />
+                <input type="text" id="user-id" v-model="formUser.userId"/>
               </div>
               <div class="input nationality">
                 <label for="nationality">Nationality</label>
                 <input
-                  type="text"
-                  id="nationality"
-                  v-model="formUser.nationality"
+                    type="text"
+                    id="nationality"
+                    v-model="formUser.nationality"
                 />
               </div>
             </div>
@@ -68,14 +68,14 @@
             <div class="input-group">
               <div class="input email">
                 <label for="email">Email</label>
-                <input type="text" id="email" v-model="formUser.email" />
+                <input type="text" id="email" v-model="formUser.email"/>
               </div>
               <div class="input phone-num">
                 <label for="phone-num">Phone number</label>
                 <input
-                  type="text"
-                  id="phone-num"
-                  v-model="formUser.phoneNumber"
+                    type="text"
+                    id="phone-num"
+                    v-model="formUser.phoneNumber"
                 />
               </div>
             </div>
@@ -84,9 +84,9 @@
               <div class="input date-of-birth">
                 <label for="date-of-birth">Date of birth</label>
                 <input
-                  type="date"
-                  id="date-of-birth"
-                  v-model="formUser.dateOfBirth"
+                    type="date"
+                    id="date-of-birth"
+                    v-model="formUser.dateOfBirth"
                 />
               </div>
             </div>
@@ -96,20 +96,21 @@
         <div class="footer-form">
           <button class="register-btn" @click="register()">Register</button>
         </div>
+        <div v-text="result"></div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { reactive, toRefs } from "vue";
-import { Web3Service } from "@/utils/web3Service";
+import {reactive, toRefs} from "vue";
+import {Web3Service} from "@/utils/web3Service";
 import LeftBar from "@/components/LeftBar.vue";
 // import {postDataApi} from "@/utils/fetchApi";
 // import {LOCAL_STORAGE_TOKEN_NAME} from "@/utils/constants";
 
 export default {
-  components: { LeftBar },
+  components: {LeftBar},
 
   setup() {
     const state = reactive({
@@ -122,37 +123,40 @@ export default {
         phoneNumber: "",
         dateOfBirth: new Date(),
       },
-
+      result: "",
       isFormOpen: false,
     });
 
-    return { ...toRefs(state) };
+    return {...toRefs(state)};
   },
 
   methods: {
     register() {
       let ethereum = window.ethereum;
       ethereum
-        .request({ method: "eth_requestAccounts" })
-        .then((accounts) => {
-          const account = accounts[0];
-          console.log(account);
-          Web3Service.signup(
-            this.formUser.username,
-            Date.parse(this.formUser.dateOfBirth),
-            this.formUser.userId,
-            this.formUser.nationality,
-            this.formUser.email,
-            this.formUser.phoneNumber,
-            this.formUser.walletAddress,
-            account
-          );
-        })
-        .catch((error) => {
-          console.log(error, error.code);
+          .request({method: "eth_requestAccounts"})
+          .then((accounts) => {
+            const account = accounts[0];
+            console.log(account);
+            Web3Service.signup(
+                this.formUser.username,
+                Date.parse(this.formUser.dateOfBirth),
+                this.formUser.userId,
+                this.formUser.nationality,
+                this.formUser.email,
+                this.formUser.phoneNumber,
+                this.formUser.walletAddress,
+                account,
+                (did) => {
+                  this.result = did;
+                }
+            );
+          })
+          .catch((error) => {
+            console.log(error, error.code);
 
-          alert(error.code);
-        });
+            alert(error.code);
+          });
     },
 
     openForm() {

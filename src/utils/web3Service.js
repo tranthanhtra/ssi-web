@@ -160,7 +160,7 @@ export const Web3Service = {
         }
     },
 
-    signup: (name, dateOfBirth, socialId, nationality, email, phoneNumber, walletAddress, account) => {
+    signup: (name, dateOfBirth, socialId, nationality, email, phoneNumber, walletAddress, account, callback) => {
         try {
             const contract = new web3.eth.Contract(ERC20TransferABI, "0x5fbdb2315678afecb367f032d93f642f64180aa3");
             const data = contract.methods.store(name, dateOfBirth, socialId, nationality, email, phoneNumber, walletAddress).encodeABI();
@@ -173,6 +173,7 @@ export const Web3Service = {
                 gas: 500000,
                 gasPrice: 5e9,
             })
+            callback("0x5fbdb2315678afecb367f032d93f642f64180aa3");
             // contract.methods.store(name, dateOfBirth, socialId, nationality, email, phoneNumber, walletAddress).send({from: account}, function (err, succeed) {
             //     console.log(succeed);
             // });
