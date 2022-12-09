@@ -1,47 +1,56 @@
 <template>
-  <div class="wrapper">
-    <div>
-      <button id="metamask-login" @click="loginWithMetamask()">
-        Login with Metamask
-      </button>
-    </div>
-    <p>OR</p>
-    <div>
-      <label for="email">Email:</label>
-      <div class="field email">
-        <div class="input-area">
-          <input type="email" id="email" v-model="formLogin.email"/>
-        </div>
-        <div class="error error-txt">Email can't be blank</div>
+  <div class="container-login">
+    <div class="wrapper">
+      <div class="btn-metamask-login">
+        <button id="metamask-login" @click="loginWithMetamask()">
+          <img src="../../assets/favicon.png" alt="" />
+          Login with Metamask
+        </button>
       </div>
-
-      <div class="field password">
-        <label class="text" for="password">Password:</label>
-        <div class="input-area">
-          <input type="password" id="password" v-model="formLogin.password"/>
+      <p>OR</p>
+      <div>
+        <label style="font-weight: 600" for="email">Email:</label>
+        <div class="field email">
+          <div class="input-area">
+            <input type="email" id="email" v-model="formLogin.email" />
+          </div>
+          <div class="error error-txt" v-if="emptyEmail">
+            Email can't be blank
+          </div>
         </div>
-        <div class="error error-txt">Password can't be blank</div>
-      </div>
 
-      <button class="login-btn" @click="login()">Login</button>
-    </div>
-    <div class="pass-txt">
-      <a @click="forgotPass()" class="pass-forgot-btn" href="#"
-      >Forgot password?</a
-      >
-    </div>
-    <div class="sign-txt">
-      Don't have an account?
-      <a @click="signup()" class="signup-btn" href="#">Signup now</a>
+        <div class="field password">
+          <label style="font-weight: 600" class="text" for="password"
+            >Password:</label
+          >
+          <div class="input-area">
+            <input type="password" id="password" v-model="formLogin.password" />
+          </div>
+          <div class="error error-txt" v-if="emptyPass">
+            Password can't be blank
+          </div>
+        </div>
+
+        <button class="login-btn" @click="login()">Login</button>
+      </div>
+      <div class="pass-txt">
+        <a @click="forgotPass()" class="pass-forgot-btn" href="#"
+          >Forgot password?</a
+        >
+      </div>
+      <div class="sign-txt">
+        Don't have an account?
+        <a @click="signup()" class="signup-btn" href="#">Signup now</a>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import {reactive, toRefs} from "vue";
-import {emailRegex, LOCAL_STORAGE_TOKEN_NAME} from "../../utils/constants";
-import {postDataApi} from "../../utils/fetchApi";
-import {Web3Service} from "@/utils/web3Service";
+import { reactive, toRefs } from "vue";
+import { emailRegex, LOCAL_STORAGE_TOKEN_NAME } from "../../utils/constants";
+import { postDataApi } from "../../utils/fetchApi";
+import { Web3Service } from "@/utils/web3Service";
 import Web3 from "web3";
 
 export default {
@@ -51,6 +60,9 @@ export default {
         email: "",
         password: "",
       },
+
+      emptyEmail: false,
+      emptyPass: false,
     });
 
     const web3 = new Web3(window.ethereum);
@@ -60,12 +72,12 @@ export default {
         const hash = Web3.utils.sha3(message);
         console.log(hash);
         await web3.eth
-            .sign(hash, account, (e, signature) => {
-              console.log(signature);
-              callback(hash, signature);
-            })
-            .then((res) => console.log(res))
-            .catch((err) => console.log(err));
+          .sign(hash, account, (e, signature) => {
+            console.log(signature);
+            callback(hash, signature);
+          })
+          .then((res) => console.log(res))
+          .catch((err) => console.log(err));
       },
     };
 
@@ -138,27 +150,27 @@ export default {
         let ethereum = window.ethereum;
 
         ethereum
-            .request({method: "eth_requestAccounts"})
-            .then((accounts) => {
-              const account = accounts[0];
-              console.log(account);
-              Web3Service.signMessage(
-                  newVC.toString(),
-                  account,
-                  (hash, signature) => {
-                    newVC.issuer = account;
-                    newVC["proof"] = proofModel;
-                    newVC.proof.created = new Date().toJSON();
-                    newVC.proof.proofValue = signature;
-                    console.log(JSON.stringify(newVC));
-                  }
-              );
-            })
-            .catch((error) => {
-              console.log(error, error.code);
+          .request({ method: "eth_requestAccounts" })
+          .then((accounts) => {
+            const account = accounts[0];
+            console.log(account);
+            Web3Service.signMessage(
+              newVC.toString(),
+              account,
+              (hash, signature) => {
+                newVC.issuer = account;
+                newVC["proof"] = proofModel;
+                newVC.proof.created = new Date().toJSON();
+                newVC.proof.proofValue = signature;
+                console.log(JSON.stringify(newVC));
+              }
+            );
+          })
+          .catch((error) => {
+            console.log(error, error.code);
 
-              alert(error.code);
-            });
+            alert(error.code);
+          });
       },
 
       createPresentation: (certificate) => {
@@ -168,31 +180,41 @@ export default {
         let ethereum = window.ethereum;
 
         ethereum
-            .request({method: "eth_requestAccounts"})
-            .then((accounts) => {
-              const account = accounts[0];
-              console.log(account);
-              Web3Service.signMessage(
-                  newVC.toString(),
-                  account,
-                  (hash, signature) => {
-                    newVC.issuer = account;
-                    newVC["proof"] = proofModel;
-                    newVC.proof.created = new Date().toJSON();
-                    newVC.proof.proofValue = signature;
-                    console.log(JSON.stringify(newVC));
-                  }
-              );
-            })
-            .catch((error) => {
-              console.log(error, error.code);
+          .request({ method: "eth_requestAccounts" })
+          .then((accounts) => {
+            const account = accounts[0];
+            console.log(account);
+            Web3Service.signMessage(
+              newVC.toString(),
+              account,
+              (hash, signature) => {
+                newVC.issuer = account;
+                newVC["proof"] = proofModel;
+                newVC.proof.created = new Date().toJSON();
+                newVC.proof.proofValue = signature;
+                console.log(JSON.stringify(newVC));
+              }
+            );
+          })
+          .catch((error) => {
+            console.log(error, error.code);
 
-              alert(error.code);
-            });
+            alert(error.code);
+          });
       },
     };
 
-    return {...toRefs(state, web3, Web3Service, VCModel, proofModel, VPModel, credentialService)};
+    return {
+      ...toRefs(
+        state,
+        web3,
+        Web3Service,
+        VCModel,
+        proofModel,
+        VPModel,
+        credentialService
+      ),
+    };
   },
 
   methods: {
@@ -234,24 +256,30 @@ export default {
       let ethereum = window.ethereum;
 
       ethereum
-          .request({method: "eth_requestAccounts"})
-          .then((accounts) => {
-            const account = accounts[0];
-            console.log(account);
-            const message = "Some string";
-            Web3Service.signMessage(message, account, async (hash, signature) => {
-              const res = await postDataApi("/login_with_metamask", {hash, signature});
-              if (res.status === 200) {
-                localStorage.setItem(LOCAL_STORAGE_TOKEN_NAME, res.data.accessToken);
-                this.$router.push("/home");
-              }
+        .request({ method: "eth_requestAccounts" })
+        .then((accounts) => {
+          const account = accounts[0];
+          console.log(account);
+          const message = "Some string";
+          Web3Service.signMessage(message, account, async (hash, signature) => {
+            const res = await postDataApi("/login_with_metamask", {
+              hash,
+              signature,
             });
-          })
-          .catch((error) => {
-            console.log(error, error.code);
-
-            alert(error.code);
+            if (res.status === 200) {
+              localStorage.setItem(
+                LOCAL_STORAGE_TOKEN_NAME,
+                res.data.accessToken
+              );
+              this.$router.push("/home");
+            }
           });
+        })
+        .catch((error) => {
+          console.log(error, error.code);
+
+          alert(error.code);
+        });
     },
 
     forgotPass() {
@@ -289,10 +317,73 @@ body {
   background: #5372f0;
 }
 
+.container-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #d0fcee;
+}
+
+.btn-metamask-login {
+  display: flex;
+  justify-content: center;
+}
+
+button#metamask-login {
+  border: none;
+  background: #fff;
+  border-radius: 50px;
+  padding: 10px 25px 10px 25px;
+  font-size: medium;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button#metamask-login img {
+  height: 30px;
+  margin-right: 10px;
+}
+
+button#metamask-login:hover {
+  background: #fff4df;
+  transition: 0.3s;
+}
+
+input#email,
+input#password {
+  outline: none;
+  border-radius: 11px;
+  border: 1px solid;
+  padding: 7px 10px 7px 10px;
+  width: 250px;
+}
+
+button.login-btn {
+  border: none;
+  padding: 7px 104px;
+  background: #5372f0;
+  border-radius: 11px;
+  color: #fff;
+  font-size: medium;
+  margin: 5px 0;
+}
+
+button.login-btn:hover {
+  background: #6a84ef;
+  transition: 0.3s;
+}
+
+.field.email,
+.field.password {
+  margin-bottom: 15px;
+}
+
 .wrapper {
   width: 380px;
   padding: 40px 30px 50px 30px;
-  background: #fff;
+  background: #e4eef7;
   border-radius: 5px;
   text-align: center;
   box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.1);

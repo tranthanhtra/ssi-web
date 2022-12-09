@@ -61,9 +61,9 @@
 
           <div class="footer-form">
             <button class="register-btn" @click="issue()">Issue</button>
-            <p class="result" v-text="formCertificate.result"></p>
-            <div></div>
           </div>
+
+          <div><p class="result" v-text="formCertificate.result"></p></div>
         </div>
       </div>
     </div>
@@ -196,6 +196,6 @@ export default {
 
 .footer-form button:hover {
   background-color: orange;
-  transition: .5s;
+  transition: 0.5s;
 }
 </style>

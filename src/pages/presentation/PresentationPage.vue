@@ -35,6 +35,9 @@
 
           <div class="footer-form">
             <button class="register-btn" @click="issue()">Create</button>
+          </div>
+
+          <div class="result-final">
             <p class="result" v-text="formCertificate.result"></p>
           </div>
         </div>

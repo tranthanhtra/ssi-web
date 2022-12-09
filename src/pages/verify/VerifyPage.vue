@@ -36,7 +36,18 @@
 
           <div class="footer-form">
             <button class="register-btn" @click="issue()">Verify</button>
-            <p class="result" v-text="formCertificate.result"></p>
+          </div>
+
+          <div class="result-final">
+            <div class="verified" v-if="formCertificate.result === true">
+              <img src="../../assets/green.png" alt="" />
+              <p>Credential Verified</p>
+            </div>
+            <div class="not-verified" v-else-if="formCertificate.result === false">
+              <img src="../../assets/red.png" alt="" />
+              <p>Credential not Verified</p>
+            </div>
+            <div class="nothing" v-else></div>
           </div>
         </div>
       </div>
@@ -152,6 +163,32 @@ export default {
 
 .footer-form button:hover {
   background-color: orange;
-  transition: .5s;
+  transition: 0.5s;
+}
+
+.result-final img {
+  height: 50px;
+}
+
+.result-final .not-verified img {
+  height: 34px;
+  margin-left: 8px;
+  margin-right: 9px;
+}
+
+.result-final .verified,
+.result-final .not-verified {
+  display: flex;
+  align-items: center;
+}
+
+.result-final .verified p {
+  color: #05a93b;
+  font-weight: 600;
+}
+
+.result-final .not-verified p {
+  color: red;
+  font-weight: 600;
 }
 </style>
