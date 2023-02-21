@@ -160,12 +160,12 @@ export const Web3Service = {
         }
     },
 
-    signup: (name, dateOfBirth, socialId, nationality, email, phoneNumber, walletAddress, account, callback) => {
+    signup: async (name, dateOfBirth, socialId, nationality, email, phoneNumber, walletAddress, account, callback) => {
         try {
             const contract = new web3.eth.Contract(ERC20TransferABI, "0x5fbdb2315678afecb367f032d93f642f64180aa3");
             const data = contract.methods.store(name, dateOfBirth, socialId, nationality, email, phoneNumber, walletAddress).encodeABI();
 
-            web3.eth.sendTransaction({
+            await web3.eth.sendTransaction({
                 from: account,
                 to: "0x5fbdb2315678afecb367f032d93f642f64180aa3",
                 data: data,

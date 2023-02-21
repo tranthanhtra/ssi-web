@@ -1,7 +1,7 @@
 <template>
   <div class="home-container">
     <div class="left-bar-container">
-      <LeftBar />
+      <LeftBar/>
     </div>
 
     <div class="main-content-container">
@@ -24,17 +24,17 @@
               <div class="input username">
                 <label for="username">Type</label>
                 <input
-                  type="text"
-                  id="username"
-                  v-model="formCertificate.type"
+                    type="text"
+                    id="username"
+                    v-model="formCertificate.type"
                 />
               </div>
               <div class="input fullname">
                 <label for="wallet-address">Subject Id</label>
                 <input
-                  type="text"
-                  id="wallet-address"
-                  v-model="formCertificate.subjectId"
+                    type="text"
+                    id="wallet-address"
+                    v-model="formCertificate.subjectId"
                 />
               </div>
             </div>
@@ -43,17 +43,17 @@
               <div class="input user-id">
                 <label for="user-id">Degree Type</label>
                 <input
-                  type="text"
-                  id="user-id"
-                  v-model="formCertificate.degreeType"
+                    type="text"
+                    id="user-id"
+                    v-model="formCertificate.degreeType"
                 />
               </div>
               <div class="input nationality">
                 <label for="nationality">Degree Name</label>
                 <input
-                  type="text"
-                  id="nationality"
-                  v-model="formCertificate.degreeName"
+                    type="text"
+                    id="nationality"
+                    v-model="formCertificate.degreeName"
                 />
               </div>
             </div>
@@ -71,12 +71,12 @@
 </template>
 
 <script>
-import { reactive, toRefs } from "vue";
-import { CredentialService } from "@/utils/credentialService";
+import {reactive, toRefs} from "vue";
+import {CredentialService} from "@/utils/credentialService";
 import LeftBar from "@/components/LeftBar.vue";
 
 export default {
-  components: { LeftBar },
+  components: {LeftBar},
 
   setup() {
     const state = reactive({
@@ -89,19 +89,19 @@ export default {
       },
     });
 
-    return { ...toRefs(state) };
+    return {...toRefs(state)};
   },
 
   methods: {
     async issue() {
       CredentialService.issue(
-        this.formCertificate.type,
-        this.formCertificate.subjectId,
-        this.formCertificate.degreeType,
-        this.formCertificate.degreeName,
-        (VC) => {
-          this.formCertificate.result = VC;
-        }
+          this.formCertificate.type,
+          this.formCertificate.degreeType,
+          this.formCertificate.degreeName,
+          this.formCertificate.subjectId,
+          (VC) => {
+            this.formCertificate.result = VC;
+          }
       );
     },
   },
