@@ -22,6 +22,14 @@
           <div class="main-body">
             <div class="input-group">
               <div class="input username">
+                <label for="did">DID</label>
+                <input
+                    type="text"
+                    id="did"
+                    v-model="formCertificate.did"
+                />
+              </div>
+              <div class="input username">
                 <label for="username">Type</label>
                 <input
                     type="text"
@@ -81,6 +89,7 @@ export default {
   setup() {
     const state = reactive({
       formCertificate: {
+        did: "",
         type: "",
         subjectId: "",
         degreeType: "",
@@ -95,6 +104,7 @@ export default {
   methods: {
     async issue() {
       CredentialService.issue(
+          this.formCertificate.did,
           this.formCertificate.type,
           this.formCertificate.degreeType,
           this.formCertificate.degreeName,

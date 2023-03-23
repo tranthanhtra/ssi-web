@@ -1,7 +1,7 @@
 <template>
   <div class="home-container">
     <div class="left-bar-container">
-      <LeftBar />
+      <LeftBar/>
     </div>
 
     <div class="main-content-container">
@@ -22,12 +22,21 @@
           <div class="main-body">
             <div class="input-group">
               <div class="input username">
+                <label for="did">DID</label>
+                <input
+                    size="50"
+                    type="text"
+                    id="did"
+                    v-model="formCertificate.did"
+                />
+              </div>
+              <div class="input username">
                 <label for="username">Type</label>
                 <input
-                  size="50"
-                  type="text"
-                  id="username"
-                  v-model="formCertificate.VC"
+                    size="50"
+                    type="text"
+                    id="username"
+                    v-model="formCertificate.VC"
                 />
               </div>
             </div>
@@ -47,31 +56,33 @@
 </template>
 
 <script>
-import { reactive, toRefs } from "vue";
-import { CredentialService } from "@/utils/credentialService";
+import {reactive, toRefs} from "vue";
+import {CredentialService} from "@/utils/credentialService";
 import LeftBar from "@/components/LeftBar.vue";
 
 export default {
-  components: { LeftBar },
+  components: {LeftBar},
 
   setup() {
     const state = reactive({
       formCertificate: {
+        did: "",
         VC: "",
         result: "",
       },
     });
 
-    return { ...toRefs(state) };
+    return {...toRefs(state)};
   },
 
   methods: {
     async issue() {
       CredentialService.createPresentation(
-        this.formCertificate.VC,
-        (presentation) => {
-          this.formCertificate.result = presentation;
-        }
+          this.formCertificate.did,
+          this.formCertificate.VC,
+          (presentation) => {
+            this.formCertificate.result = presentation;
+          }
       );
     },
   },

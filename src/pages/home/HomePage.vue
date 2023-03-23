@@ -12,6 +12,9 @@
           <div class="btn-create">
             <button @click="openForm()">New User</button>
           </div>
+          <div class="btn-create">
+            <button @click="openProviderForm()">New Provider</button>
+          </div>
         </div>
 
         <div class="content">
@@ -26,18 +29,22 @@
       <div class="create-form">
         <div class="header-form">
           <div class="header-form-container">
-            <div class="title">Create new user</div>
+            <div class="title">Create new provider</div>
             <button class="x-close" @click="closeForm()">X</button>
           </div>
         </div>
 
         <div class="body-form">
-          <div class="title">User infomation</div>
+          <div class="title">Provider information</div>
 
           <div class="main-body">
             <div class="input-group">
               <div class="input username">
-                <label for="username">User name</label>
+                <label for="username">DID</label>
+                <input type="text" id="did" v-model="formUser.DID"/>
+              </div>
+              <div class="input username">
+                <label for="username">Provider name</label>
                 <input type="text" id="username" v-model="formUser.username"/>
               </div>
               <div class="input fullname">
@@ -99,6 +106,42 @@
         <div v-text="result"></div>
       </div>
     </div>
+    <div class="create-user-ssi-container" v-if="isProviderFormOpen">
+      <div class="create-form">
+        <div class="header-form">
+          <div class="header-form-container">
+            <div class="title">Create new user</div>
+            <button class="x-close" @click="closeProviderForm()">X</button>
+          </div>
+        </div>
+
+        <div class="body-form">
+          <div class="title">User infomation</div>
+
+          <div class="main-body">
+            <div class="input-group">
+              <div class="input username">
+                <label for="username">User name</label>
+                <input type="text" id="username" v-model="formProvider.name"/>
+              </div>
+              <div class="input fullname">
+                <label for="wallet-address">Wallet address</label>
+                <input
+                    type="text"
+                    id="wallet-address"
+                    v-model="formProvider.walletAddress"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-form">
+          <button class="register-btn" @click="providerRegister()">Register</button>
+        </div>
+        <div v-text="result"></div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -115,6 +158,7 @@ export default {
   setup() {
     const state = reactive({
       formUser: {
+        DID: "",
         username: "",
         walletAddress: "",
         userId: "",
@@ -123,8 +167,13 @@ export default {
         phoneNumber: "",
         dateOfBirth: new Date(),
       },
+      formProvider: {
+        name: "",
+        walletAddress: "",
+      },
       result: "",
       isFormOpen: false,
+      isProviderFormOpen: false,
     });
 
     return {...toRefs(state)};
@@ -139,6 +188,7 @@ export default {
             const account = accounts[0];
             console.log(account);
             Web3Service.signup(
+                this.formUser.DID,
                 this.formUser.username,
                 Date.parse(this.formUser.dateOfBirth),
                 this.formUser.userId,
@@ -159,12 +209,43 @@ export default {
           });
     },
 
+    providerRegister() {
+      let ethereum = window.ethereum;
+      ethereum
+          .request({method: "eth_requestAccounts"})
+          .then((accounts) => {
+            const account = accounts[0];
+            console.log(account);
+            Web3Service.providerSignUp(
+                this.formProvider.name,
+                this.formProvider.walletAddress,
+                account,
+                (did) => {
+                  this.result = did;
+                }
+            );
+          })
+          .catch((error) => {
+            console.log(error, error.code);
+
+            alert(error.code);
+          });
+
+    },
+
     openForm() {
       this.isFormOpen = true;
     },
 
     closeForm() {
       this.isFormOpen = false;
+    },
+    openProviderForm() {
+      this.isProviderFormOpen = true;
+    },
+
+    closeProviderForm() {
+      this.isProviderFormOpen = false;
     },
   },
 };

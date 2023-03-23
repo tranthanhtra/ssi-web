@@ -60,7 +60,7 @@ const VPModel = {
 }
 
 export const CredentialService = {
-    issue: (type, degreeType, degreeName, subjectId, callback) => {
+    issue: (did, type, degreeType, degreeName, subjectId, callback) => {
         const {...newVC} = VCModel;
 
         newVC.type.push(type);
@@ -68,7 +68,7 @@ export const CredentialService = {
         newVC.credentialSubject.id = subjectId;
         newVC.credentialSubject.degree.type = degreeType;
         newVC.credentialSubject.degree.name = degreeName;
-        newVC.issuer = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+        newVC.issuer = did;
 
         console.log(newVC);
         let ethereum = window.ethereum;
@@ -92,10 +92,10 @@ export const CredentialService = {
             })
     },
 
-    createPresentation: (certificate, callback) => {
+    createPresentation: (did, certificate, callback) => {
         const {...newVP} = VPModel;
         newVP.verifiableCredential.push(JSON.parse(certificate));
-        newVP.holder = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+        newVP.holder = did;
         console.log(newVP);
         let ethereum = window.ethereum;
         ethereum
