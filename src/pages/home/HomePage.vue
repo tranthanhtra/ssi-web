@@ -29,13 +29,13 @@
       <div class="create-form">
         <div class="header-form">
           <div class="header-form-container">
-            <div class="title">Create new provider</div>
+            <div class="title">Create new user</div>
             <button class="x-close" @click="closeForm()">X</button>
           </div>
         </div>
 
         <div class="body-form">
-          <div class="title">Provider information</div>
+          <div class="title">User information</div>
 
           <div class="main-body">
             <div class="input-group">
@@ -110,19 +110,19 @@
       <div class="create-form">
         <div class="header-form">
           <div class="header-form-container">
-            <div class="title">Create new user</div>
+            <div class="title">Create new provider</div>
             <button class="x-close" @click="closeProviderForm()">X</button>
           </div>
         </div>
 
         <div class="body-form">
-          <div class="title">User infomation</div>
+          <div class="title">Provider infomation</div>
 
           <div class="main-body">
             <div class="input-group">
               <div class="input username">
-                <label for="username">User name</label>
-                <input type="text" id="username" v-model="formProvider.name"/>
+                <label for="provider-name">Provider name</label>
+                <input type="text" id="provider-name" v-model="formProvider.name"/>
               </div>
               <div class="input fullname">
                 <label for="wallet-address">Wallet address</label>
