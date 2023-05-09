@@ -234,6 +234,7 @@ export default {
     },
 
     openForm() {
+      this.result = "";
       this.isFormOpen = true;
     },
 
@@ -241,6 +242,7 @@ export default {
       this.isFormOpen = false;
     },
     openProviderForm() {
+      this.result = "";
       this.isProviderFormOpen = true;
     },
 
@@ -327,7 +329,7 @@ export default {
   width: 600px;
   min-width: 600px;
   border-radius: 11px;
-  height: 430px;
+  height: 500px;
   min-height: 430px;
 }
 

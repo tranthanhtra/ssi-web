@@ -197,7 +197,7 @@ const IdentifierABI = [
         "stateMutability": "view",
         "type": "function"
     }
-]
+];
 
 const ServiceABI = [
     {
@@ -327,6 +327,25 @@ export const Web3Service = {
             contract.methods.verify(signature, hash).call(function (err, isValid) {
                 console.log(isValid);
                 callback(isValid);
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    },
+
+    addCertificate: async (hash, zip, address, account, callback) => {
+        console.log("hash" + hash);
+        console.log("zip" + zip);
+        try {
+            const contract = new web3.eth.Contract(IdentifierABI, address);
+            contract.methods.addCredential(hash, zip).send({
+                from: account,
+            }).then(function () {
+                console.log("okay");
+                contract.methods.getCredential(hash).call().then(function (result) {
+                    console.log(result);
+                    callback(result);
+                })
             });
         } catch (err) {
             console.log(err);

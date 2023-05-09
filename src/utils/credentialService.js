@@ -1,4 +1,6 @@
 import {Web3Service} from "@/utils/web3Service";
+// import {ipfs} from "@/utils/ipfsService";
+// const gzip = require('gzip-js');
 
 const VCModel = {
     "@context": [
@@ -60,7 +62,11 @@ const VPModel = {
 }
 
 export const CredentialService = {
-    issue: (did, type, degreeType, degreeName, subjectId, callback) => {
+    issue: async (did, type, degreeType, degreeName, subjectId, callback) => {
+
+        // const {cid} = await ipfs.add('Hello');
+
+        // console.log(cid);
         const {...newVC} = VCModel;
 
         newVC.type.push(type);
@@ -83,7 +89,12 @@ export const CredentialService = {
                     newVC.proof.proofValue = signature;
                     console.log(JSON.stringify(newVC));
                     callback(JSON.stringify(newVC));
-                })
+                    // var zip = btoa(gzip.zip(JSON.stringify(newVC)));
+                    // console.log(zip);
+                    // Web3Service.addCertificate(hash, zip, did, account, (isValid) => {
+                    //     console.log(isValid);
+                    // });
+                });
             })
             .catch((error) => {
                 console.log(error, error.code);
